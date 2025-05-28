@@ -1,6 +1,6 @@
 {
   "name": "@alexvsoliveira/lambda-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core abstractions and strategies for AWS Lambda handlers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,8 +20,5 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.149",
     "typescript": "^5.0.0"
-  },
-  "publishConfig": {
-    "registry": "https://github.com/alexvsoliveira/lambda-core"
   }
 }
