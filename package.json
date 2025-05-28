@@ -1,6 +1,6 @@
 {
   "name": "@alexvsoliveira/lambda-core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Core abstractions and strategies for AWS Lambda handlers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
