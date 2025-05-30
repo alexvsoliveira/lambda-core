@@ -37,6 +37,5 @@ __exportStar(require("./interfaces/lambda-event.interface"), exports);
 __exportStar(require("./types/validation.type"), exports);
 __exportStar(require("./utils/dto.util"), exports);
 __exportStar(require("./utils/validation.util"), exports);
-__exportStar(require("./repository/mongo/mongoose/base-mongo.repository"), exports);
 __exportStar(require("./decorators/serverless.decorator"), exports);
 __exportStar(require("./utils/serverless-config.util"), exports);
