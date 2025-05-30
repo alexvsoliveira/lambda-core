@@ -22,5 +22,5 @@ export * from './types/validation.type';
 export * from './utils/dto.util';
 export * from './utils/validation.util';
 export * from './repository/mongo/mongoose/base-mongo.repository';
-
-
+export * from './decorators/serverless.decorator';
+export * from './utils/serverless-config.util'; 
