@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 export interface ServerlessConfig {
     resource?: {
         name: string;
@@ -13,4 +14,4 @@ export interface ServerlessConfig {
     };
 }
 export declare const SERVERLESS_METADATA = "serverless";
-export declare const Serverless: (config: ServerlessConfig) => import("@nestjs/common").CustomDecorator<string>;
+export declare function Serverless(config: ServerlessConfig): ClassDecorator;
