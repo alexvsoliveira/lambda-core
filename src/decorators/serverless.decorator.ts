@@ -1,4 +1,4 @@
-import { SetMetadata } from '@nestjs/common';
+import 'reflect-metadata';
 
 export interface ServerlessConfig {
   resource?: {
@@ -17,5 +17,8 @@ export interface ServerlessConfig {
 
 export const SERVERLESS_METADATA = 'serverless';
 
-export const Serverless = (config: ServerlessConfig) =>
-  SetMetadata(SERVERLESS_METADATA, config);
+export function Serverless(config: ServerlessConfig): ClassDecorator {
+  return (target) => {
+    Reflect.defineMetadata(SERVERLESS_METADATA, config, target);
+  };
+}

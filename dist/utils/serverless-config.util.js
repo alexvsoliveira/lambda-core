@@ -73,11 +73,13 @@ class ServerlessConfigGenerator {
                             }
                             if (metadata.function) {
                                 const { name, events } = metadata.function;
+                                const relativePath = file
+                                    .replace(process.cwd(), '') // remove o root do projeto
+                                    .replace(/^\/?src\//, 'src/') // força início com src/
+                                    .replace(/\.ts$|\.js$/, '') // remove extensão
+                                    .replace(/\\/g, '/'); // Windows compatível
                                 functions[name] = {
-                                    handler: file
-                                        .replace(srcPath, 'src')
-                                        .replace('.ts', '')
-                                        .replace(/\\/g, '/'),
+                                    handler: `${relativePath}.handler`,
                                     events: events === null || events === void 0 ? void 0 : events.map((event) => ({
                                         [event.type]: event.properties,
                                     })),
