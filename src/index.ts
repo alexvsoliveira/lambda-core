@@ -66,17 +66,13 @@ export type { LambdaValidationFieldErrors } from './types/validation.type';
 // DECORATORS - Decoradores para Error Handling
 // ============================================================================
 export { ErrorHandler } from './error-handling/global-error-handling/decorators/error-handler.decorator';
+export { Serverless } from './decorators/serverless.decorator';
+export { ServerlessConfig } from './decorators/serverless.decorator';
 
 // ============================================================================
 // REGISTRIES - Registro de Handlers Globais
 // ============================================================================
 export { GlobalErrorHandlerRegistry } from './error-handling/global-error-handling/registry/global-error-handler-registry';
-
-// ============================================================================
-// DECORATORS - Decorators de Handlers Globais
-// ============================================================================
-export { Serverless } from './decorators/serverless.decorator';
-export { ServerlessConfig } from './decorators/serverless.decorator';
 
 // ============================================================================
 // EXCEPTIONS - Classes de Exceção
@@ -128,21 +124,27 @@ export default {
   LambdaApiGatewayHandler: require('./abstracts/api-gateway-lambda-handler.abstract').LambdaApiGatewayHandler,
   SnsLambdaHandler: require('./abstracts/sns-lambda-handler.abstract').SnsLambdaHandler,
   SqsLambdaHandler: require('./abstracts/sqs-lambda-handler.abstract').SqsLambdaHandler,
+  ScheduledLambdaHandler: require('./abstracts/scheduled-lambda-handler.abstract').ScheduledLambdaHandler,
 
   // Factories
   LambdaApiGatewayHandlerFactory: require('./factories/api-gateway-lambda-handler.factory')
     .LambdaApiGatewayHandlerFactory,
   SnsLambdaHandlerFactory: require('./factories/sns-lambda-handler.factory').SnsLambdaHandlerFactory,
   SqsLambdaHandlerFactory: require('./factories/sqs-lambda-handler.factory').SqsLambdaHandlerFactory,
+  ScheduledLambdaHandlerFactory: require('./factories/scheduled-lambda-handler.factory').ScheduledLambdaHandlerFactory,
 
   // Utilities
   LambdaDtoUtil: require('./utils/dto.util').LambdaDtoUtil,
   LambdaValidationUtil: require('./utils/validation.util').LambdaValidationUtil,
+  ServerlessConfigGenerator: require('./utils/serverless-config.util').ServerlessConfigGenerator,
 
   // Error Handling
   ErrorHandler: require('./error-handling/global-error-handling/decorators/error-handler.decorator').ErrorHandler,
   GlobalErrorHandlerRegistry: require('./error-handling/global-error-handling/registry/global-error-handler-registry')
     .GlobalErrorHandlerRegistry,
+  Serverless: require('./decorators/serverless.decorator').Serverless,
+  ServerlessConfig: require('./decorators/serverless.decorator').ServerlessConfig,
+
 
   // Exceptions
   LambdaMainHttpException: require('./exceptions/http.exception').LambdaMainHttpException,
