@@ -1,4 +1,6 @@
-import { HttpException } from './http.exception';
-export declare class HttpFieldValidationException extends HttpException {
-    constructor(errors: string[]);
+import { LambdaValidationFieldErrors } from '../types/validation.type';
+import { LambdaMainHttpException } from './http.exception';
+export declare class LambdaHttpFieldValidationException extends LambdaMainHttpException {
+    errors: LambdaValidationFieldErrors;
+    constructor(errors: LambdaValidationFieldErrors);
 }

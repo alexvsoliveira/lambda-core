@@ -1,4 +1,4 @@
-import { HttpStatus } from 'src/enums/http-status.enum';
+import { HttpStatus } from '../enums/http-status.enum';
 import { LambdaValidationFieldErrors } from '../types/validation.type';
 import { LambdaMainHttpException } from './http.exception';
 

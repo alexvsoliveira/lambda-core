@@ -1,7 +1,6 @@
 import { SQSEvent } from 'aws-lambda';
-import { BaseLambdaHandler } from './base-lambda-handler.abstract';
-export declare abstract class SqsLambdaHandler<TDto, TResponse> extends BaseLambdaHandler<SQSEvent, void> {
-    protected abstract dtoClass: new () => TDto;
-    protected abstract handleBusinessLogic(dto: TDto): Promise<TResponse>;
-    execute(event: SQSEvent): Promise<void>;
+import { LambdaEventParsingStrategy } from '../interfaces/lambda-event.interface';
+import { LambdaBaseLambdaHandler } from './base-lambda-handler.abstract';
+export declare abstract class SqsLambdaHandler<TDto extends Object, TSuccessResponse, TErrorResponse> extends LambdaBaseLambdaHandler<SQSEvent, TDto, TSuccessResponse, TErrorResponse, TDto[]> {
+    protected get parsingStrategy(): LambdaEventParsingStrategy<SQSEvent, TDto, TDto[]>;
 }

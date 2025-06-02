@@ -1,10 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateDto = validateDto;
-const class_validator_1 = require("class-validator");
-async function validateDto(dto) {
-    const errors = await (0, class_validator_1.validate)(dto);
-    if (errors.length > 0) {
-        throw new Error(JSON.stringify(errors));
+exports.LambdaValidationUtil = void 0;
+class LambdaValidationUtil {
+    static getAllFieldErrors(validationErrors, fieldErrors = {}) {
+        validationErrors.forEach((error) => {
+            const fieldName = error.property;
+            fieldErrors[fieldName] = [];
+            // Esse campo possui mensagens de erro a serem exibidas?
+            if (error.constraints) {
+                fieldErrors[fieldName] = Object.values(error.constraints);
+            }
+            // Esse campo possui outros campos aninhados a serem validados?
+            if (error.children && error.children.length > 0) {
+                fieldErrors[fieldName] = this.getAllFieldErrors(error.children);
+            }
+        });
+        return fieldErrors;
     }
 }
+exports.LambdaValidationUtil = LambdaValidationUtil;

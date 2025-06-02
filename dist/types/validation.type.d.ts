@@ -1,2 +1,3 @@
-import { ValidationError } from 'class-validator';
-export type ValidationErrors = ValidationError[];
+export type LambdaValidationFieldErrors = {
+    [key: string]: string[] | unknown;
+};

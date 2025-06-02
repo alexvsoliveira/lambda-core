@@ -1,16 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SnsLambdaHandler = void 0;
+const sns_parsing_strategy_1 = require("../strategies/sns-parsing.strategy");
 const base_lambda_handler_abstract_1 = require("./base-lambda-handler.abstract");
-class SnsLambdaHandler extends base_lambda_handler_abstract_1.BaseLambdaHandler {
-    async execute(event) {
-        for (const record of event.Records) {
-            const message = JSON.parse(record.Sns.Message);
-            // @ts-ignore
-            const dto = Object.assign(new this.dtoClass(), message);
-            // @ts-ignore
-            await this.handleBusinessLogic(dto);
-        }
+class SnsLambdaHandler extends base_lambda_handler_abstract_1.LambdaBaseLambdaHandler {
+    get parsingStrategy() {
+        return new sns_parsing_strategy_1.SnsParsingStrategy();
     }
 }
 exports.SnsLambdaHandler = SnsLambdaHandler;

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 export declare class ServerlessConfigGenerator {
     private static getFilesRecursively;
     static generateConfig(srcPath: string): {

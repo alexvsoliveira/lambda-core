@@ -1,35 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SqsParsingStrategy = void 0;
-function isSQSEvent(event) {
-    return (event &&
-        event.Records.every((r) => typeof r.body === 'string') &&
-        Array.isArray(event.Records) &&
-        true &&
-        typeof event === 'object');
-}
+const dto_util_1 = require("../utils/dto.util");
+/**
+ * Estratégia para parsing de eventos SQS
+ */
 class SqsParsingStrategy {
-    static parseMessages(event) {
-        if (!isSQSEvent(event)) {
-            throw new Error('Invalid event structure: not an SQSEvent');
+    parseEventToDto(event, dtoClass) {
+        const dtos = [];
+        for (const record of event.Records) {
+            const sqsMessage = record.body;
+            const messageData = JSON.parse(sqsMessage);
+            const dto = dto_util_1.LambdaDtoUtil.parseDataToDto(dtoClass, messageData);
+            dtos.push(dto);
         }
-        const records = event.Records;
-        return records.map((record) => {
-            const rawBody = record.body;
-            let parsed;
-            try {
-                parsed = JSON.parse(rawBody);
-            }
-            catch (err) {
-                console.error('Error parsing SQS record body:', rawBody, err);
-                throw new Error('Invalid JSON in SQS message body');
-            }
-            if (typeof parsed !== 'object' || parsed === null) {
-                console.error('Parsed value is not a valid object:', parsed);
-                throw new Error('Parsed SQS message is not an object');
-            }
-            return parsed;
-        });
+        return dtos;
+    }
+    canHandle(event) {
+        return (typeof event === 'object' &&
+            event !== null &&
+            'Records' in event &&
+            Array.isArray(event.Records) &&
+            event.Records.length > 0 &&
+            'body' in event.Records[0] &&
+            'receiptHandle' in event.Records[0]);
     }
 }
 exports.SqsParsingStrategy = SqsParsingStrategy;

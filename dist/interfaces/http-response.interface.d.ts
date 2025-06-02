@@ -1,5 +1,12 @@
-export interface HttpResponse<T = any> {
+export interface LambdaHttpResponse<T> {
     statusCode: number;
-    body: T;
-    headers?: Record<string, string>;
+    body: {
+        message: T;
+        statusCode: number;
+        timestamp?: string;
+    };
+}
+export interface LambdaApiGatewayResponse {
+    statusCode: number;
+    body: string;
 }

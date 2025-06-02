@@ -1,9 +1,14 @@
-import { BaseLambdaHandler } from './base-lambda-handler.abstract';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-export declare abstract class LambdaApiGatewayHandler<TDto, TResponse> extends BaseLambdaHandler<APIGatewayProxyEvent, APIGatewayProxyResult> {
-    protected abstract dtoClass: new () => TDto;
-    protected abstract handleBusinessLogic(dto: TDto): Promise<TResponse>;
-    protected getSuccessStatusCode(): number;
-    protected handleError(error: unknown): APIGatewayProxyResult;
-    execute(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult>;
+import { APIGatewayEvent } from 'aws-lambda';
+import { LambdaHttpResponse } from '../interfaces/http-response.interface';
+import { LambdaEventParsingStrategy } from '../interfaces/lambda-event.interface';
+import { LambdaBaseLambdaHandler } from './base-lambda-handler.abstract';
+import { HttpStatus } from '../enums/http-status.enum';
+export declare abstract class LambdaApiGatewayHandler<TDto extends Object, TSuccessResponse = LambdaHttpResponse<string>, TErrorResponse = LambdaHttpResponse<string>> extends LambdaBaseLambdaHandler<APIGatewayEvent, TDto, TSuccessResponse, TErrorResponse, TDto> {
+    protected get parsingStrategy(): LambdaEventParsingStrategy<APIGatewayEvent, TDto, TDto>;
+    execute(event: APIGatewayEvent): Promise<TSuccessResponse | TErrorResponse>;
+    protected handleErrorResponse(error: unknown): TErrorResponse;
+    protected getSuccessStatusCode(): HttpStatus;
+    private convertToApiGatewayResponse;
+    private isHttpResponse;
+    protected extractMetadata(_error: unknown, event: APIGatewayEvent): Record<string, unknown>;
 }
