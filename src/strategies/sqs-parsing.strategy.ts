@@ -1,40 +1,34 @@
-import {SQSEvent, SQSRecord} from 'aws-lambda';
+import { SQSEvent } from 'aws-lambda';
+import { LambdaEventParsingStrategy } from '../interfaces/lambda-event.interface';
+import { LambdaDtoUtil } from '../utils/dto.util';
 
-function isSQSEvent(event: unknown): event is SQSEvent {
-    return <boolean>(
-        event &&
-        (event as SQSEvent).Records.every((r) => typeof r.body === 'string') &&
-        Array.isArray((event as SQSEvent).Records) &&
-        true &&
-        typeof event === 'object'
-    );
-}
+/**
+ * Estratégia para parsing de eventos SQS
+ */
+export class SqsParsingStrategy<TDto> implements LambdaEventParsingStrategy<SQSEvent, TDto, TDto[]> {
+  parseEventToDto(event: SQSEvent, dtoClass: new () => TDto): TDto[] {
+    const dtos: TDto[] = [];
 
-export class SqsParsingStrategy {
-    static parseMessages<T>(event: unknown): T[] {
-        if (!isSQSEvent(event)) {
-            throw new Error('Invalid event structure: not an SQSEvent');
-        }
+    for (const record of event.Records) {
+      const sqsMessage = record.body;
+      const messageData = JSON.parse(sqsMessage);
 
-        const records: readonly SQSRecord[] = event.Records;
-
-        return records.map((record) => {
-            const rawBody: string = record.body;
-
-            let parsed: unknown;
-            try {
-                parsed = JSON.parse(rawBody);
-            } catch (err) {
-                console.error('Error parsing SQS record body:', rawBody, err);
-                throw new Error('Invalid JSON in SQS message body');
-            }
-
-            if (typeof parsed !== 'object' || parsed === null) {
-                console.error('Parsed value is not a valid object:', parsed);
-                throw new Error('Parsed SQS message is not an object');
-            }
-
-            return parsed as T;
-        });
+      const dto = LambdaDtoUtil.parseDataToDto(dtoClass, messageData) as TDto;
+      dtos.push(dto);
     }
+
+    return dtos;
+  }
+
+  canHandle(event: unknown): event is SQSEvent {
+    return (
+      typeof event === 'object' &&
+      event !== null &&
+      'Records' in event &&
+      Array.isArray(event.Records) &&
+      event.Records.length > 0 &&
+      'body' in event.Records[0] &&
+      'receiptHandle' in event.Records[0]
+    );
+  }
 }

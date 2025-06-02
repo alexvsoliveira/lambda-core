@@ -1,6 +1,5 @@
-export interface ExceptionResponse {
-  message: string;
-  code: string;
+export interface LambdaHttpExceptionData<T = unknown> {
+  message: T;
   statusCode: number;
-  details?: any;
+  timestamp?: string;
 }

@@ -1,7 +1,13 @@
-import { HttpException } from './http.exception';
+import { HttpStatus } from 'src/enums/http-status.enum';
+import { LambdaValidationFieldErrors } from '../types/validation.type';
+import { LambdaMainHttpException } from './http.exception';
 
-export class HttpFieldValidationException extends HttpException {
-  constructor(errors: string[]) {
-    super('Validation Failed', 400, 'VALIDATION_ERROR', errors);
+export class LambdaHttpFieldValidationException extends LambdaMainHttpException {
+  constructor(public errors: LambdaValidationFieldErrors) {
+    super({
+      message: errors,
+      statusCode: HttpStatus.BAD_REQUEST,
+      timestamp: new Date().toISOString(),
+    });
   }
 }

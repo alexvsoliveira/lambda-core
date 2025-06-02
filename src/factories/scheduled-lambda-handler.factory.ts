@@ -1,12 +1,18 @@
-import {ExecutableHandler} from "../interfaces/executable-hander.interface";
+import { Context, Handler, ScheduledEvent } from 'aws-lambda';
+import { ScheduledLambdaHandler } from '../abstracts/scheduled-lambda-handler.abstract';
 
+/**
+ * Factory for creating scheduled Lambda handlers
+ */
 export class ScheduledLambdaHandlerFactory {
-  static createHandlerFromClass<
-    TEvent,
-    TResult,
-    T extends new () => ExecutableHandler<TEvent, TResult>,
-  >(HandlerClass: T): (event: TEvent) => Promise<TResult> {
-    const instance = new HandlerClass();
-    return instance.execute.bind(instance);
+  /**
+   * Creates a Lambda handler function for scheduled events
+   * @param handlerClass The concrete handler class
+   */
+  static create(handlerClass: new () => ScheduledLambdaHandler): Handler<ScheduledEvent, void> {
+    return async (event: ScheduledEvent, context: Context): Promise<void> => {
+      const handler = new handlerClass();
+      await handler.execute(event);
+    };
   }
-}
+} 
