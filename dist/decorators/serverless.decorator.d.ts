@@ -1,22 +1,4 @@
 import 'reflect-metadata';
-type EventType = 'http' | 'schedule' | 'sns' | 'sqs';
-type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head' | 'any';
-interface SimplifiedServerlessConfig {
-    name: string;
-    type: EventType;
-    properties?: {
-        path?: string;
-        method?: HttpMethod;
-        cors?: boolean;
-        authorizer?: string | Record<string, any>;
-        rate?: string[];
-        topicName?: string;
-        queueName?: string;
-        batchSize?: number;
-    };
-    enabled?: boolean;
-    resource?: 'SNS' | 'SQS' | 'Lambda';
-}
 export interface ServerlessConfig {
     resource?: {
         name: string;
@@ -26,11 +8,10 @@ export interface ServerlessConfig {
     function?: {
         name: string;
         events?: {
-            type: EventType;
+            type: 'schedule' | 'sns' | 'sqs' | 'http';
             properties: Record<string, any>;
         }[];
     };
 }
 export declare const SERVERLESS_METADATA = "serverless";
-export declare function Serverless(config: SimplifiedServerlessConfig): ClassDecorator;
-export {};
+export declare function Serverless(config: ServerlessConfig): ClassDecorator;
